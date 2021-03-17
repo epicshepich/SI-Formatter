@@ -1,0 +1,46 @@
+<html>
+  <head>
+    <title>NMR Summary Generator</title>
+    <meta charset="UTF-8">
+  </head>
+  <body>
+    <div title="Specify the field strength of the spectrometer. The default value is 500 MHz.">Spectrometer Field (MHz):<br />
+    <textarea id="B">500</textarea></div><br />
+    <br />
+
+<div title="">Solvent:<br />
+    <select name="solvent" id="solvent">
+  <option value="CDCl₃">CDCl₃</option>
+  <option value="C₆D₆">C₆D₆</sub></option>
+  <option value="D₂O">D₂O</option>
+  <option value="DMSO-𝘥₆">DMSO-𝘥₆</sub></option>
+</select></div><br />
+<br />
+
+
+      <table id="table">
+        <tr>
+          <th>Peak #</th>
+          <th title="This is where you specify the ppm or ppm range of the peak.">δ (ppm)</th>
+          <th title="This is where you specify the type of splitting pattern: d, t, q, m, dd, dt, etc.">Splitting Pattern</th>
+          <th title="This is where you specify the coupling constant(s). If you have multiple, delimit them with a comma and a space.">J</th>
+          <th title="This is where you specify the integration.">Integration</th>
+        </tr>
+
+        <tr>
+          <td>1</td>
+          <td><textarea id="ppm1"></textarea></td>
+          <td><textarea id="S1"></textarea></td>
+          <td><textarea id="J1"></textarea></td>
+          <td><textarea id="I1"></textarea></td>
+        </tr>
+      </table>
+<button id="addchoice">Add Peak</button><br /><br />
+<hr />
+      Generated Text:<br />
+      <textarea id="outbox" rows="20" cols="100" readonly=true></textarea><br />
+      <br />
+
+      <script src="main.js"></script>
+  </body>
+</html>
