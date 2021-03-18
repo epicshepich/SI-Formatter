@@ -1,72 +1,170 @@
-/*function dasshutsu(str){
-  var output = str
-  output = output.replace(/\\/g,"\\\\")
-  output = output.replace(/[\u2018\u2019]/g, "'")
-  output = output.replace(/[\u201C\u201D]/g, '"');
-  output = output.replace(/\"/g,"\\\"")
-  output = output.replace(/\'/g,"\\\'")
-  output = output.replace(/\//g,"\\\/")
-  output = output.replace(/\&/g,"\\\&")
-//  output = output.replace(/\n/g,"\\n")
-  return output
-}*/
-
-var Table = document.getElementById("table");
-var Solvent = document.getElementById("solvent");
-var Field = document.getElementById("B");
 var Outbox= document.getElementById("outbox");
-var rows = 1
+
+/*=================================================================================
+                              CODE THAT DEALS WITH
+                        TOGGLING DIFFERENT PARTS OF THE SI
+=================================================================================*/
+var checkbox={
+  _procedure:document.getElementById("check_procedure"),
+  _1h:document.getElementById("check_1h"),
+  _13c:document.getElementById("check_13c"),
+  _ir:document.getElementById("check_ir"),
+}
+var containers={
+  _procedure:document.getElementById("procedure"),
+  _1h:document.getElementById("1H-NMR"),
+  _13c:document.getElementById("13C-NMR"),
+  _ir:document.getElementById("IR")
+}
+containers_display=function(){
+  for(key in containers){
+    if(checkbox[key].checked){
+      containers[key].style.display="inline";
+    } else {
+      containers[key].style.display="none";
+    }
+  }
+}
+containers_display();
+
+/*=================================================================================
+                                      PROCEDURE
+                        OBJECTS, METHODS, AND VARIABLES
+=================================================================================*/
+var procedures={selector:document.getElementById("proc_select")}
+procedures.formation={
+  X:document.getElementById("proc_form_X"),
+  X_calc:document.getElementById("proc_form_Xcalc"),
+  X_amount:document.getElementById("proc_form_Xamt"),
+  Y:document.getElementById("proc_form_Y"),
+  Y_calc:document.getElementById("proc_form_Ycalc"),
+  Y_amount:document.getElementById("proc_form_Yamt"),
+  mass:document.getElementById("proc_form_mass"),
+  yield:document.getElementById("proc_form_yield"),
+  physical:document.getElementById("proc_form_physchar"),
+}
+procedures.formation.write=function(){
+  var str = "The general procedure was used for the formation of the title compound, starting from "+this.X.value+" ("+this.X_calc.value+", "+this.X_amount.value+") and "+this.Y.value+" ("+this.Y_calc.value+", "+this.Y_amount.value+"). This procedure afforded "+this.mass.value+" ("+this.yield.value+"% overall yield) of the title compound as a "+this.physical.value+". "
+  return str
+}
+
+
+/*=================================================================================
+                                  NMR
+                      OBJECTS, METHODS, AND VARIABLES
+=================================================================================*/
+
+var proton={
+  table:document.getElementById("H_table"),
+  solvent:document.getElementById("H_solvent"),
+  field:document.getElementById("H_B"),
+  rows:1
+}
+
+var carbon={
+  table:document.getElementById("C_table"),
+  solvent:document.getElementById("C_solvent"),
+  field:document.getElementById("C_B"),
+  rows:1
+}
+
+proton.addrow=function(){
+  for(h=1;h<=proton.rows;h++){
+    document.getElementById("H_ppm"+h).innerHTML=document.getElementById("H_ppm"+h).value
+    document.getElementById("H_S"+h).innerHTML=document.getElementById("H_S"+h).value
+    document.getElementById("H_J"+h).innerHTML=document.getElementById("H_J"+h).value
+    document.getElementById("H_I"+h).innerHTML=document.getElementById("H_I"+h).value
+  }
+  proton.rows++
+  proton.table.innerHTML+="<tr><td>"+proton.rows+"</td><td><textarea id=\"H_ppm"+proton.rows+"\"></textarea></td><td><textarea id=\"H_S"+proton.rows+"\"></textarea></td><td><textarea id=\"H_J"+proton.rows+"\"></textarea></td><td><textarea id=\"H_I"+proton.rows+"\"></textarea></td></tr>"
+}
+
+carbon.addrow=function(){
+  for(c=1;c<=carbon.rows;c++){
+    document.getElementById("C_ppm"+c).innerHTML=document.getElementById("C_ppm"+c).value
+    document.getElementById("C_S"+c).innerHTML=document.getElementById("C_S"+c).value
+    document.getElementById("C_J"+c).innerHTML=document.getElementById("C_J"+c).value
+  }
+  carbon.rows++
+  carbon.table.innerHTML+="<tr><td>"+carbon.rows+"</td><td><textarea id=\"C_ppm"+carbon.rows+"\"></textarea></td><td><textarea id=\"C_S"+carbon.rows+"\"></textarea></td><td><textarea id=\"C_J"+carbon.rows+"\"></textarea></td></tr>"
+}
+
+document.getElementById("H_addrow").addEventListener("click",proton.addrow)
+document.getElementById("C_addrow").addEventListener("click",carbon.addrow)
+
+
+
+/*=================================================================================
+
+                          FUNCTION THAT WRITES THE SI
+
+=================================================================================*/
 
 function write(){
-  var summary_text="¹H NMR";
-  summary_text+=" ("+Field.value+" MHz, "+Solvent.value+") δ ";
+  var summary_text="";
 
-
-    for(k=1;k<=rows;k++){
-      summary_text+=document.getElementById("ppm"+k).value.replace(/-/g,"—");
-      summary_text+=" ("+document.getElementById("S"+k).value;
-      if(document.getElementById("J"+k).value!==""){
-        summary_text+=", 𝘑 = "+document.getElementById("J"+k).value+" Hz";
-      }
-      summary_text+=", "+document.getElementById("I"+k).value+" H) ";
-    }
-
-  summary_text=summary_text.slice(0,-1)
-  summary_text+="."
-  Outbox.value = summary_text
-}
-
-/*function vetname(element){
-    element.value=element.value.replace(/[.*+\'\"?^${}()|[\]\\]/g,"")
-    element.value=element.value.replace(/ /g,"")
-    for(j=0;j<10;j++){
-      while(element.value.indexOf(j)==0){
-        element.value=element.value.slice(1)
+/*===================================PROCEDURE=====================================*/
+  if(checkbox._procedure.checked){
+    switch(procedures.selector.value){
+      case "formation":
+        summary_text+=procedures.formation.write()
+        break;
+        case "coupling":
+        break;
+        default:
       }
     }
-    element.value=element.value.toLowerCase()
+/*===================================1H-NMR=======================================*/
+  if(checkbox._1h.checked){
+    summary_text+="<sup>1</sup>H NMR";
+    summary_text+=" ("+proton.field.value+" MHz, "+proton.solvent.value+") δ ";
+
+      for(h=1;h<=proton.rows;h++){
+        summary_text+=document.getElementById("H_ppm"+h).value.replace(/-/g,"—");
+        summary_text+=" ("+document.getElementById("H_S"+h).value;
+        if(document.getElementById("H_J"+h).value!==""){
+          summary_text+=", <i>J</i> = "+document.getElementById("H_J"+h).value+" Hz";
+        }
+        summary_text+=", "+document.getElementById("H_I"+h).value+" H) ";
+      }
+
+      summary_text=summary_text.slice(0,-1)
+      summary_text+="; "
+    }
+
+/*==================================13C-NMR=======================================*/
+  if(checkbox._13c.checked){
+    summary_text+="<sup>13</sup>C NMR";
+    summary_text+=" ("+carbon.field.value+" MHz, "+carbon.solvent.value+") δ ";
+
+      for(c=1;c<=carbon.rows;c++){
+        summary_text+=document.getElementById("C_ppm"+c).value.replace(/-/g,"—");
+
+        if(document.getElementById("C_S"+c).value!==""){
+          summary_text+=" ("+document.getElementById("C_S"+c).value;
+          if(document.getElementById("C_J"+c).value!==""){
+            summary_text+=", <i>J</i><sub>CF</sub> = "+document.getElementById("C_J"+c).value+" Hz";
+          }
+          summary_text+=")"
+        }
+        summary_text+=", "
+      }
+
+      summary_text=summary_text.slice(0,-2)
+      summary_text+=". "
+    }
+
+
+/*===================================OUTPUT=======================================*/
+
+  Outbox.innerHTML = summary_text
 }
 
-function vetnames(){
-    vetname(Name)
-  for(k=1;k<=nC;k++){
-    vetname(document.getElementById("outcome"+k))
-  }
-}*/
 
-function addchoices(){
-  for(k=1;k<=rows;k++){
-    document.getElementById("ppm"+k).innerHTML=document.getElementById("ppm"+k).value
-    document.getElementById("S"+k).innerHTML=document.getElementById("S"+k).value
-    document.getElementById("J"+k).innerHTML=document.getElementById("J"+k).value
-    document.getElementById("I"+k).innerHTML=document.getElementById("I"+k).value
-  }
-  rows++
-  table.innerHTML+="<tr><td>"+rows+"</td><td><textarea id=\"ppm"+rows+"\"></textarea></td><td><textarea id=\"S"+rows+"\"></textarea></td><td><textarea id=\"J"+rows+"\"></textarea></td><td><textarea id=\"I"+rows+"\"></textarea></td></tr>"
-}
-
-
-//document.addEventListener("keyup",vetnames)
 document.addEventListener("keyup",write)
-document.addEventListener("click",write)
-document.getElementById("addchoice").addEventListener("click",addchoices)
+carbon.solvent.addEventListener("click",write)
+proton.solvent.addEventListener("click",write)
+for(key in checkbox){
+  checkbox[key].addEventListener("click",write)
+  checkbox[key].addEventListener("click",containers_display)
+}

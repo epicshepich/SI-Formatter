@@ -1,0 +1,14 @@
+Autosize textareas to fit
+
+PROCEDURE
+  https://pubs.acs.org/doi/suppl/10.1021/jacs.5b07203/suppl_file/ja5b07203_si_001.pdf
+  Add "coupling" procedure
+  add optional melting point
+  a/an +physchar
+  blank (write your own from scratch) option
+
+Chiral HPLC option
+
+IR
+
+Mass Spec

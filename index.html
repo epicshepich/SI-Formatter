@@ -1,24 +1,57 @@
 <html>
   <head>
-    <title>NMR Summary Generator</title>
+    <title>SI Formatter</title>
     <meta charset="UTF-8">
   </head>
   <body>
+<!-- ==================================================================
+                            ELEMENT SELECTOR
+======================================================================= -->
+
+<input type="checkbox" id="check_procedure">
+<label for="check_procedure">Procedure</label><br>
+<input type="checkbox" id="check_1h" checked>
+<label for="check_1h"><sup>1</sup>H NMR</label><br>
+<input type="checkbox" id="check_13c" checked>
+<label for="check_13c"><sup>13</sup>C NMR</label><br>
+<input type="checkbox" id="check_ir">
+<label for="check_ir">IR Spectrum</label><br>
+
+<!-- ==================================================================
+                            PROCEDURE
+======================================================================= -->
+<div id="procedure">
+
+  <font size=5>Procedure<br /></font><br />
+  <select name="Select Procedure" id="proc_select">
+    <option value="formation">General Procedure: Formation of Title Compound from X + Y</option>
+    <option value="coupling">General Procedure: Coupling of X and Y</option>
+  </select>
+      <div id="proc_form">The general procedure was used for the formation of the title compound, starting from <textarea id="proc_form_X" placeholder="4-fluorophenol" title="starting material" rows=1></textarea> (<textarea id="proc_form_Xcalc" placeholder="1.26 g" title="calc (mass or volume)" rows=1></textarea>, <textarea id="proc_form_Xamt" placeholder="10 mmol" title="amount" rows=1></textarea>) and <textarea id="proc_form_Y" placeholder="allyl bromide" title="reagent" rows=1></textarea> (<textarea id="proc_form_Ycalc" placeholder="1.04 mL" title="calc (mass or volume)" rows=1></textarea>, <textarea id="proc_form_Yamt" placeholder="12 mmol" title="amount" rows=1></textarea>). This procedure afforded <textarea id="proc_form_mass" placeholder="677 mg" title="mass yield" rows=1></textarea> g (<textarea id="proc_form_yield" placeholder="24" title="percent yield" rows=1></textarea>% overall yield) of the title compound as a <textarea id="proc_form_physchar" placeholder="colorless oil" title="physical characterization (including color and state of matter)" rows=1></textarea>.
+      </div>
+    </div>
+
+<!-- ==================================================================
+                            PROTON NMR
+======================================================================= -->
+
+    <div id="1H-NMR">
+    <font size=5><sup>1</sup>H NMR Spectrum<br /></font><br />
     <div title="Specify the field strength of the spectrometer. The default value is 500 MHz.">Spectrometer Field (MHz):<br />
-    <textarea id="B">500</textarea></div><br />
+    <textarea id="H_B">500</textarea></div><br />
     <br />
 
 <div title="">Solvent:<br />
-    <select name="solvent" id="solvent">
-  <option value="CDCl₃">CDCl₃</option>
-  <option value="C₆D₆">C₆D₆</sub></option>
-  <option value="D₂O">D₂O</option>
-  <option value="DMSO-𝘥₆">DMSO-𝘥₆</sub></option>
-</select></div><br />
+  <select name="solvent" id="H_solvent">
+  <option value="CDCl<sub>3</sub>">CDCl₃</option>
+  <option value="C<sub>6</sub>D<sub>6</sub>">C₆D₆</sub></option>
+  <option value="D<sub>2</sub>O">D₂O</option>
+  <option value="DMSO-<i>d</i><sub>6</sub>">DMSO-𝘥₆</sub></option>
+  </select></div><br />
 <br />
 
 
-      <table id="table">
+      <table id="H_table">
         <tr>
           <th>Peak #</th>
           <th title="This is where you specify the ppm or ppm range of the peak.">δ (ppm)</th>
@@ -29,17 +62,68 @@
 
         <tr>
           <td>1</td>
-          <td><textarea id="ppm1"></textarea></td>
-          <td><textarea id="S1"></textarea></td>
-          <td><textarea id="J1"></textarea></td>
-          <td><textarea id="I1"></textarea></td>
+          <td><textarea id="H_ppm1"></textarea></td>
+          <td><textarea id="H_S1"></textarea></td>
+          <td><textarea id="H_J1"></textarea></td>
+          <td><textarea id="H_I1"></textarea></td>
         </tr>
       </table>
-<button id="addchoice">Add Peak</button><br /><br />
+<button id="H_addrow">Add Peak</button><br /><br />
 <hr />
-      Generated Text:<br />
-      <textarea id="outbox" rows="20" cols="100" readonly=true></textarea><br />
+</div>
+
+<!-- ==================================================================
+                            CARBON NMR
+======================================================================= -->
+
+<div id="13C-NMR">
+<font size=5><sup>13</sup>C NMR Spectrum<br /></font><br />
+<div title="Specify the field strength of the spectrometer. The default value is 500 MHz.">Spectrometer Field (MHz):<br />
+<textarea id="C_B">500</textarea></div><br />
+<br />
+
+<div title="">Solvent:<br />
+<select name="solvent" id="C_solvent">
+<option value="CDCl<sub>3</sub>">CDCl₃</option>
+<option value="C<sub>6</sub>D<sub>6</sub>">C₆D₆</sub></option>
+<option value="D<sub>2</sub>O">D₂O</option>
+<option value="DMSO-<i>d</i><sub>6</sub>">DMSO-𝘥₆</sub></option>
+</select></div><br />
+<br />
+
+
+  <table id="C_table">
+    <tr>
+      <th>Peak #</th>
+      <th title="This is where you specify the ppm or ppm range of the peak.">δ (ppm)</th>
+      <th title="This is where you specify the type of splitting pattern: d, t, q, m, dd, dt, etc.">Splitting Pattern</th>
+      <th title="This is where you specify the coupling constant(s). If you have multiple, delimit them with a comma and a space.">J<sub>CF</sub></th>
+    </tr>
+
+    <tr>
+      <td>1</td>
+      <td><textarea id="C_ppm1"></textarea></td>
+      <td><textarea id="C_S1"></textarea></td>
+      <td><textarea id="C_J1"></textarea></td>
+    </tr>
+  </table>
+<button id="C_addrow">Add Peak</button><br /><br />
+</div>
+
+<!-- ==================================================================
+                            IR SPECTRUM
+======================================================================= -->
+<div id="IR"></div>
+<!-- ==================================================================
+                        GENERATED SI (OUTPUT)
+======================================================================= -->
+
+<hr />
+      Generated Text:<br /><br />
+    <!--   <textarea id="outbox" rows="20" cols="100" readonly=true></textarea><br /> -->
+    <div id="outbox"></div>
       <br />
+      <!--<button id="Copy">Copy to Clipboard</button> -->
 
       <script src="main.js"></script>
   </body>
